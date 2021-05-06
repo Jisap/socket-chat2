@@ -15,6 +15,7 @@ socket.on('connect', function() {                           // Cuando un cliente
     console.log('Conectado al server');
     socket.emit('entrarChat',  usuario, (resp) => {         // El cliente emite un evento con el nombre del usuario y recibirá una respuesta
         console.log('Usuarios conectados: ', resp)          // La respuesta es generada por el server en este caso los usuarios conectados.
+        renderizarUsuarios(resp);
     })              
 });
 
@@ -39,10 +40,13 @@ socket.on('disconnect', function() {                        // El cliente se des
 
 socket.on('crearMensaje', ( mensaje ) => {                  // A la escucha de crearMensaje por parte del server
     console.log('Servidor: ', mensaje)                      // recibirá el mensaje de este.
+    renderizarMensajes(mensaje, false);                     // yo estará en false porque aqui no somos nosotros los que emitimos el mensaje
+    scrollBottom()
 });
 
 socket.on('listaPersonas', ( personas ) => {                // A la escucha de listaPersonas por parte del server
-    console.log( personas )                                 // recibirá la lista de personas conectadas.
+    console.log( personas );                                // recibirá la lista de personas conectadas.
+    renderizarUsuarios( personas );                         // que permitirá renderizar en el html los usuarios conectados                                 
 });
 
 socket.on('mensajePrivado', (mensaje) => {
